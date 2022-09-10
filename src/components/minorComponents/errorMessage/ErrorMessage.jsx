@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import TextComponent from '../textComponent/TextComponent';
-import TextFieldComponent from '../textFieldComponent/TextFieldComponent';
 import img from '../../../assets/img/error.png';
 
 import './errorMessage.scss';
@@ -17,9 +16,6 @@ const ErrorMessage = ({ message }) => {
       <img src={img} alt="error" />
       <div className="error_message__container__content">
         <TextComponent text={`A-A-A-A!!! Что-то пошло не так...`} />
-        {process.env.NODE_ENV !== 'production' && message ? (
-          <TextFieldComponent text={message} />
-        ) : null}
         <button
           onClick={() => {
             navigate('/');
