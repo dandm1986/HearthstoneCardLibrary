@@ -1,0 +1,22 @@
+@import '../../../styles/variables.scss';
+
+.nav {
+  z-index: 5;
+
+  &_links {
+    list-style: none;
+
+    display: flex;
+    align-items: center;
+    gap: 2.4rem;
+
+    &__link {
+      text-decoration: none;
+      color: $main-color;
+
+      font-size: 2rem;
+
+      transition: all 0.3s ease-in;
+    }
+  }
+}

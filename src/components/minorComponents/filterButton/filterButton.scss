@@ -1,0 +1,46 @@
+@import '../../../styles/variables.scss';
+
+.filter_btn {
+  &__container {
+    display: inline-block;
+    width: 5.2rem;
+    height: 5.2rem;
+
+    cursor: pointer;
+
+    transition: all 0.3s;
+
+    fill: $main-color;
+
+    position: relative;
+
+    &:hover {
+      fill: $main-color--hover;
+    }
+  }
+
+  &__bg {
+    width: inherit;
+    height: inherit;
+  }
+
+  &__fill {
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 100%;
+
+    background: $secondary-color--lighter;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &__icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    z-index: 100;
+
+    use {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

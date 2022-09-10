@@ -1,0 +1,21 @@
+.error_message__container {
+  height: 100%;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 50%;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
+    align-items: center;
+    p {
+      font-size: 2.4rem;
+    }
+  }
+}

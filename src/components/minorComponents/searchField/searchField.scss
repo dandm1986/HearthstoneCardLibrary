@@ -1,0 +1,45 @@
+@import '../../../styles/variables.scss';
+
+.search_field {
+  &__container {
+    height: 4rem;
+    width: 19.6rem;
+
+    position: relative;
+  }
+
+  &__bg {
+    height: 100%;
+    width: 100%;
+
+    position: absolute;
+
+    img {
+      width: inherit;
+    }
+  }
+
+  &__input {
+    font-size: 1.6rem;
+    color: $main-color;
+
+    width: 80%;
+
+    background-color: $secondary-color--lighter;
+    border: none;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    &::placeholder {
+      font-size: 1.6rem;
+      color: $main-color;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

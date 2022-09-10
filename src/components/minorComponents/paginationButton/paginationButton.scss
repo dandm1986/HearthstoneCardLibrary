@@ -1,0 +1,52 @@
+@import '../../../styles/variables.scss';
+
+.pagination_btn {
+  width: 24rem;
+  height: 4rem;
+
+  background: $secondary-color--lighter;
+  border: 2px solid $secondary-color--darker;
+  border-radius: 0.9em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  &__text {
+    font-size: 2rem;
+
+    color: $main-color;
+
+    position: absolute;
+  }
+  &__btns {
+    width: 20rem;
+    height: 2.4rem;
+
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      height: inherit;
+
+      border: none;
+      background-color: transparent;
+    }
+
+    &__icon {
+      width: 2.4rem;
+      height: inherit;
+      fill: $main-color;
+
+      cursor: pointer;
+
+      transition: all 0.3s;
+
+      &:hover {
+        fill: $main-color--hover;
+      }
+    }
+  }
+}

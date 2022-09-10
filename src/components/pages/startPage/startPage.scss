@@ -1,0 +1,17 @@
+.start_page__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  &__image {
+    height: 50rem;
+  }
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+}
+
+.start_page__footer {
+  display: flex;
+  justify-content: flex-end;
+}

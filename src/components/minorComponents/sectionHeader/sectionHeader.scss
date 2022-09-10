@@ -1,0 +1,12 @@
+@import '../../../styles//variables.scss';
+
+.section {
+  &_header {
+    justify-self: center;
+    align-self: center;
+    &__text {
+      font-size: 2.4rem;
+      color: $main-color;
+    }
+  }
+}

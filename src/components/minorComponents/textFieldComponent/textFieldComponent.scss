@@ -1,0 +1,10 @@
+@import '../../../styles/variables.scss';
+
+.text_field_component {
+  font-size: 1.6rem;
+  color: $main-color;
+
+  padding: 1rem 2rem;
+  background-color: $secondary-color--darker;
+  border-radius: 9px;
+}
