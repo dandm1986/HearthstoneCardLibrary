@@ -1,20 +1,24 @@
+// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { createFilterStr } from '../../../services/hearthstoneApiService';
-
+// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import TextFieldComponent from '../../minorComponents/textFieldComponent/TextFieldComponent';
 import Spinner from '../../minorComponents/spinner/Spinner';
+import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
+// Импорт методов
+import { createFilterStr } from '../../../services/hearthstoneApiService';
 import { fetchHeroes, resetCurrentHeroIdx, displayHero } from './heroesSlice';
 
+// Импорт статических файлов
 import './heroesListPage.scss';
 
 const HeroesListPage = () => {
-  const { heroes, heroesLength, queryData } = useSelector(
+  const { heroes, heroesLength, queryData, heroesLoadingStatus } = useSelector(
     (state) => state.heroes
   );
   const { metadata } = useSelector((state) => state.metadata);
@@ -79,12 +83,13 @@ const HeroesListPage = () => {
   };
 
   const spinner = heroesLength < 10 ? <Spinner /> : null;
-
+  const error = heroesLoadingStatus === 'error' ? <ErrorMessage /> : null;
   const content = heroesLength === 10 ? renderContent(heroes) : null;
 
   return (
     <>
       {spinner}
+      {error}
       {content}
     </>
   );

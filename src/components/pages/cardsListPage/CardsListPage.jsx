@@ -1,50 +1,47 @@
+// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { createFilterStr } from '../../../services/hearthstoneApiService';
-
+// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import PaginationButton from '../../minorComponents/paginationButton/PaginationButton';
 import Spinner from '../../minorComponents/spinner/Spinner';
+import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
+// Импорт методов
 import {
-  fetchCards,
-  clearState,
-  displayCard,
-  prevPage,
-  nextPage,
-} from './cardsSlice';
+  createFilterStr,
+  createURL,
+} from '../../../services/hearthstoneApiService';
+import { fetchCards, displayCard, prevPage, nextPage } from './cardsSlice';
 
+// Импорт статических файлов
 import './cardsListPage.scss';
 
 const CardsListPage = () => {
-  const { cards, queryData, cardsLoadingStatus } = useSelector(
+  const { cards, queryData, cardsLoadingStatus, currentPage } = useSelector(
     (state) => state.cards
   );
-  const { metadata } = useSelector((state) => state.metadata);
-  const { metadataLoadingStatus } = useSelector((state) => state.metadata);
+  const { apiBase, endpoint, filters } = queryData;
+  const { page } = filters;
 
   const dispatch = useDispatch();
 
-  const { apiBase, endpoint, filters } = queryData;
-
-  const currentFilters = createFilterStr(filters);
-
   useEffect(() => {
-    dispatch(clearState());
-    dispatch(
-      fetchCards({
+    if (currentPage !== page) {
+      const url = createURL({
         apiBase,
-        endpoint: endpoint.cards,
-        filters: currentFilters,
-      })
-    );
+        endpoint,
+        filters: createFilterStr(filters),
+      });
+      dispatch(fetchCards(url));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [page]);
 
-  const renderContent = (cards, metadata) => {
+  const renderContent = (cards) => {
     return (
       <SectionLayout>
         <SectionHeader
@@ -85,15 +82,14 @@ const CardsListPage = () => {
   };
 
   const spinner = cardsLoadingStatus === 'loading' ? <Spinner /> : null;
-
+  const error = cardsLoadingStatus === 'error' ? <ErrorMessage /> : null;
   const content =
-    metadataLoadingStatus === `idle` && cards.cards
-      ? renderContent(cards, metadata)
-      : null;
+    cardsLoadingStatus === `idle` && cards ? renderContent(cards) : null;
 
   return (
     <>
       {spinner}
+      {error}
       {content}
     </>
   );

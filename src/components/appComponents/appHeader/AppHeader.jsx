@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import FilterButton from '../../minorComponents/filterButton/FilterButton';
 import SearchField from '../../minorComponents/searchField/SearchField';
@@ -27,6 +27,12 @@ const AppHeader = () => {
     }
   };
 
+  const reloadApp = () => {
+    window.location.reload();
+  };
+
+  const navigate = useNavigate();
+
   return (
     <header className="main_header flex">
       <div className="main_header__bg">
@@ -50,8 +56,11 @@ const AppHeader = () => {
         />
       </div>
       <div className="main_header__container flex">
-        <Link
-          to={'/'}
+        <button
+          onClick={() => {
+            navigate('/');
+            reloadApp();
+          }}
           onMouseEnter={(e) => {
             toggleScale(e, headerLogo);
           }}

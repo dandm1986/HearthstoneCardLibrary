@@ -4,7 +4,9 @@ import img from '../../../assets/img/error.png';
 
 import './errorMessage.scss';
 
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = ({
+  text: message = 'A-A-A-A!!! Что-то пошло не так...',
+}) => {
   const reloadApp = () => {
     window.location.reload();
   };
@@ -15,7 +17,7 @@ const ErrorMessage = ({ message }) => {
     <div className="error_message__container">
       <img src={img} alt="error" />
       <div className="error_message__container__content">
-        <TextComponent text={`A-A-A-A!!! Что-то пошло не так...`} />
+        <TextComponent text={message} />
         <button
           onClick={() => {
             navigate('/');

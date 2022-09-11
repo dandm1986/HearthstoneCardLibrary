@@ -10,8 +10,8 @@ export const getToken = async () => {
         }),
         {
           auth: {
-            username: '2186110eda924e8983900c2bd1eb40f9',
-            password: 'nYlp1FE0LtyLxb0FD18fudHzH8PzREdZ',
+            username: '311d7bb58df945e093ece72c135c1dd8',
+            password: 'e3x60Kxj7ldpXda6NwNPF58lP6PJ2rrl',
           },
         }
       );
@@ -42,5 +42,57 @@ export const createURL = ({ apiBase, endpoint, filters }) => {
   const url = `${apiBase}${endpoint}?${filters}&access_token=${sessionStorage.getItem(
     'Blizzard API token'
   )}`;
+  return url;
+};
+
+// Рефакторинг методов
+
+const apiData = {
+  apiBase: 'https://us.api.blizzard.com/hearthstone',
+  endpoint: {
+    metadata: '/metadata',
+    cards: '/cards',
+    heroes: '/deck',
+  },
+  filters: {
+    locale: 'ru_RU',
+  },
+};
+
+export const fetchMetadataUrl = (filtersObj) => {
+  const {
+    apiBase,
+    endpoint: { metadata: endpoint },
+    filters,
+  } = apiData;
+
+  const url = createURL({
+    apiBase,
+    endpoint,
+    filters: createFilterStr({
+      ...filters,
+      ...filtersObj,
+    }),
+  });
+
+  return url;
+};
+
+export const fetchHeroesUrl = (filtersObj) => {
+  const {
+    apiBase,
+    endpoint: { heroes: endpoint },
+    filters,
+  } = apiData;
+
+  const url = createURL({
+    apiBase,
+    endpoint,
+    filters: createFilterStr({
+      ...filters,
+      ...filtersObj,
+    }),
+  });
+
   return url;
 };

@@ -1,14 +1,18 @@
+// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import TextComponent from '../../minorComponents/textComponent/TextComponent';
 import TextFieldComponent from '../../minorComponents/textFieldComponent/TextFieldComponent';
 import PaginationButton from '../../minorComponents/paginationButton/PaginationButton';
 import Spinner from '../../minorComponents/spinner/Spinner';
+import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
+// Импорт методов
 import {
   createIdList,
   createFilterStr,
@@ -19,6 +23,7 @@ import {
   nextHero,
 } from '../heroesListPage/heroesSlice';
 
+// Импорт статических файлов
 import './singleHeroPage.scss';
 
 const SingleHeroPage = () => {
@@ -30,9 +35,7 @@ const SingleHeroPage = () => {
     currentHeroCardIdx,
     heroCardsLoadingStatus,
   } = useSelector((state) => state.heroes);
-
   const { metadata } = useSelector((state) => state.metadata);
-
   const { apiBase, endpoint, filters } = queryData;
 
   const dispatch = useDispatch();
@@ -126,7 +129,7 @@ const SingleHeroPage = () => {
   };
 
   const spinner = heroCardsLoadingStatus === 'loading' ? <Spinner /> : null;
-
+  const error = heroCardsLoadingStatus === 'error' ? <ErrorMessage /> : null;
   const content =
     heroCardsLoadingStatus === `idle` && heroCards
       ? renderContent(heroCards[currentHeroCardIdx])
@@ -135,6 +138,7 @@ const SingleHeroPage = () => {
   return (
     <>
       {spinner}
+      {error}
       {content}
     </>
   );

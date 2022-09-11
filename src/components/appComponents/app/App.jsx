@@ -9,6 +9,7 @@ import HeroesListPage from '../../pages/heroesListPage/HeroesListPage';
 import SingleHeroPage from '../../pages/singleHeroPage/SingleHeroPage';
 import FiltersPage from '../../pages/filtersPage/FiltersPage';
 import ErrorBoundary from '../../minorComponents/errorBoundary/ErrorBoundary';
+import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 import './app.scss';
 
@@ -26,6 +27,12 @@ function App() {
               <Route path="heroes" element={<HeroesListPage />} />
               <Route path="heroes/:id" element={<SingleHeroPage />} />
               <Route path="filters" element={<FiltersPage />} />
+              <Route
+                path="*"
+                element={
+                  <ErrorMessage text={'Ой-ой-ой! Нет такой страницы...'} />
+                }
+              />
             </Routes>
           </ErrorBoundary>
         </MainSection>

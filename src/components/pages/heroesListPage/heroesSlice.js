@@ -1,6 +1,8 @@
+// Импорт из внешних библиотек
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useHttp } from '../../../hooks/http.hook';
 
+// Импорт методов
+import { useHttp } from '../../../hooks/http.hook';
 import { createURL } from '../../../services/hearthstoneApiService';
 
 const initialState = {
