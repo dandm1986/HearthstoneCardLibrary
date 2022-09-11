@@ -22,10 +22,13 @@ export const fetchToken = createAsyncThunk('start/getToken', async () => {
   return await getToken();
 });
 
-export const fetchMetadata = createAsyncThunk('start/fetchMetadata', (url) => {
-  const { getData } = useHttp();
-  return getData(url);
-});
+export const fetchMetadata = createAsyncThunk(
+  'start/fetchMetadata',
+  async (url) => {
+    const { getData } = useHttp();
+    return await getData(url);
+  }
+);
 
 const startSlice = createSlice({
   name: 'start',
@@ -36,7 +39,6 @@ const startSlice = createSlice({
         state.metadataLoadingStatus = 'loading';
       })
       .addCase(fetchMetadata.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.metadata = action.payload;
         state.metadataLoadingStatus = 'idle';
       })

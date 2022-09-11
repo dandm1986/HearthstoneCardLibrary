@@ -12,7 +12,6 @@ const initialState = {
     endpoint: '/cards',
     filters: {
       locale: 'ru_RU',
-      set: `core`,
       page: 1,
       pageSize: 10,
     },

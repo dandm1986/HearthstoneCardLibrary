@@ -1,16 +1,26 @@
+// Импорт из внешних библиотек
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field, Form } from 'formik';
 
-import { setQueryFilters } from '../cardsListPage/cardsSlice';
-
+// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 
+// Импорт методов
+import {
+  createURL,
+  createFilterStr,
+} from '../../../services/hearthstoneApiService';
+import { fetchCards } from '../cardsListPage/cardsSlice';
+
+// Импорт статических файлов
 import './filtersPage.scss';
 
 const FiltersPage = () => {
   const { metadata } = useSelector((state) => state.metadata);
+  const { queryData } = useSelector((state) => state.cards);
+  const { apiBase, endpoint, filters } = queryData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,7 +65,12 @@ const FiltersPage = () => {
           pageSize: 10,
         }}
         onSubmit={(values) => {
-          dispatch(setQueryFilters(values));
+          const url = createURL({
+            apiBase,
+            endpoint,
+            filters: createFilterStr({ ...filters, ...values }),
+          });
+          dispatch(fetchCards(url));
           navigate('/cards');
         }}
       >

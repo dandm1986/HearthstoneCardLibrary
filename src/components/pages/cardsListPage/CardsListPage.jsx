@@ -34,7 +34,7 @@ const CardsListPage = () => {
       const url = createURL({
         apiBase,
         endpoint,
-        filters: createFilterStr(filters),
+        filters: createFilterStr({ ...filters, set: 'core' }),
       });
       dispatch(fetchCards(url));
     }
