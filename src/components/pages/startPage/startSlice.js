@@ -8,6 +8,7 @@ import { getToken } from '../../../services/hearthstoneApiService';
 const initialState = {
   metadata: null,
   metadataLoadingStatus: 'idle',
+  tokenLoadingStatus: 'idle',
   queryData: {
     apiBase: 'https://us.api.blizzard.com/hearthstone',
     endpoint: '/metadata',
@@ -17,16 +18,14 @@ const initialState = {
   },
 };
 
-export const fetchMetadata = createAsyncThunk(
-  'start/fetchMetadata',
-  async (url) => {
-    const { getData } = useHttp();
+export const fetchToken = createAsyncThunk('start/getToken', async () => {
+  return await getToken();
+});
 
-    await getToken();
-
-    return getData(url);
-  }
-);
+export const fetchMetadata = createAsyncThunk('start/fetchMetadata', (url) => {
+  const { getData } = useHttp();
+  return getData(url);
+});
 
 const startSlice = createSlice({
   name: 'start',
@@ -37,11 +36,21 @@ const startSlice = createSlice({
         state.metadataLoadingStatus = 'loading';
       })
       .addCase(fetchMetadata.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.metadata = action.payload;
         state.metadataLoadingStatus = 'idle';
       })
       .addCase(fetchMetadata.rejected, (state) => {
         state.metadataLoadingStatus = 'error';
+      })
+      .addCase(fetchToken.pending, (state) => {
+        state.tokenLoadingStatus = 'loading';
+      })
+      .addCase(fetchToken.fulfilled, (state) => {
+        state.tokenLoadingStatus = 'idle';
+      })
+      .addCase(fetchToken.rejected, (state) => {
+        state.tokenLoadingStatus = 'error';
       });
   },
 });

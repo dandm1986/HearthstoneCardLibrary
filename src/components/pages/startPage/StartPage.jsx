@@ -13,7 +13,7 @@ import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
-import { fetchMetadata } from './startSlice';
+import { fetchToken, fetchMetadata } from './startSlice';
 import {
   createFilterStr,
   createURL,
@@ -24,7 +24,7 @@ import img from '../../../assets/img/start_page_hero.png';
 import './startPage.scss';
 
 const StartPage = () => {
-  const { queryData, metadataLoadingStatus } = useSelector(
+  const { queryData, metadataLoadingStatus, tokenLoadingStatus } = useSelector(
     (state) => state.metadata
   );
   const { apiBase, endpoint, filters } = queryData;
@@ -32,12 +32,14 @@ const StartPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const url = createURL({
-      apiBase,
-      endpoint,
-      filters: createFilterStr(filters),
+    dispatch(fetchToken()).then(() => {
+      const url = createURL({
+        apiBase,
+        endpoint,
+        filters: createFilterStr(filters),
+      });
+      dispatch(fetchMetadata(url));
     });
-    dispatch(fetchMetadata(url));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,9 +88,18 @@ const StartPage = () => {
     );
   };
 
-  const spinner = metadataLoadingStatus === 'loading' ? <Spinner /> : null;
-  const error = metadataLoadingStatus === 'error' ? <ErrorMessage /> : null;
-  const content = metadataLoadingStatus === `idle` ? renderContent() : null;
+  const spinner =
+    tokenLoadingStatus === 'loading' || metadataLoadingStatus === 'loading' ? (
+      <Spinner />
+    ) : null;
+  const error =
+    tokenLoadingStatus === 'error' || metadataLoadingStatus === 'error' ? (
+      <ErrorMessage />
+    ) : null;
+  const content =
+    tokenLoadingStatus === 'idle' && metadataLoadingStatus === `idle`
+      ? renderContent()
+      : null;
 
   return (
     <>

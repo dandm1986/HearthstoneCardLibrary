@@ -19,7 +19,10 @@ export const getToken = async () => {
       const token = response.data.access_token;
 
       sessionStorage.setItem('Blizzard API token', token);
+
+      return true;
     }
+    return true;
   } catch (error) {
     throw error;
   }
