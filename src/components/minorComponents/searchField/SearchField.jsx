@@ -4,19 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // Импорт методов
-import {
-  createURL,
-  createFilterStr,
-} from '../../../services/hearthstoneApiService';
-import { fetchCards } from '../../pages/cardsListPage/cardsSlice';
+import { setQuery, fetchCards } from '../../pages/cardsListPage/cardsSlice';
 
 // Импорт статических файлов
 import searchFieldBg from '../../../assets/img/search_field__bg.png';
 import './searchField.scss';
 
 const SearchField = () => {
-  const { queryData } = useSelector((state) => state.cards);
-  const { apiBase, endpoint, filters } = queryData;
+  const { query } = useSelector((state) => state.cards);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,16 +25,21 @@ const SearchField = () => {
         initialValues={{
           textFilter: ``,
           set: ``,
+          class: ``,
+          manaCost: ``,
+          attack: ``,
+          health: ``,
+          collectible: ``,
+          rarity: ``,
+          type: ``,
+          minionType: ``,
+          gameMode: ``,
           page: 1,
           pageSize: 10,
         }}
         onSubmit={(values, { resetForm }) => {
-          const url = createURL({
-            apiBase,
-            endpoint,
-            filters: createFilterStr({ ...filters, ...values }),
-          });
-          dispatch(fetchCards(url));
+          dispatch(setQuery(values));
+          dispatch(fetchCards({ ...query, ...values }));
           navigate('/cards');
           resetForm({ values: '' });
         }}

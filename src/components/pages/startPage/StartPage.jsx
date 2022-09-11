@@ -14,31 +14,30 @@ import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
 import { fetchToken, fetchMetadata } from './startSlice';
-import {
-  createFilterStr,
-  createURL,
-} from '../../../services/hearthstoneApiService';
+import // createFilterStr,
+// createURL,
+'../../../services/hearthstoneApiService';
 
 // Импорт статических файлов
 import img from '../../../assets/img/start_page_hero.png';
 import './startPage.scss';
 
 const StartPage = () => {
-  const { queryData, metadataLoadingStatus, tokenLoadingStatus } = useSelector(
+  const { metadataLoadingStatus, tokenLoadingStatus } = useSelector(
     (state) => state.metadata
   );
-  const { apiBase, endpoint, filters } = queryData;
+  // const { apiBase, endpoint, filters } = queryData;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchToken()).then(() => {
-      const url = createURL({
-        apiBase,
-        endpoint,
-        filters: createFilterStr(filters),
-      });
-      dispatch(fetchMetadata(url));
+      // const url = createURL({
+      //   apiBase,
+      //   endpoint,
+      //   filters: createFilterStr(filters),
+      // });
+      dispatch(fetchMetadata());
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

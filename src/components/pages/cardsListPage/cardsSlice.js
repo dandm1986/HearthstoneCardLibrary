@@ -3,35 +3,34 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Импорт методов
 import { useHttp } from '../../../hooks/http.hook';
+import { fetchCardsUrl } from '../../../services/hearthstoneApiService';
 
 const initialState = {
   cards: null,
   cardsLoadingStatus: 'idle',
-  queryData: {
-    apiBase: 'https://us.api.blizzard.com/hearthstone',
-    endpoint: '/cards',
-    filters: {
-      locale: 'ru_RU',
-      page: 1,
-      pageSize: 10,
-    },
+  query: {
+    page: 1,
+    pageSize: 10,
   },
   currentPage: null,
 };
 
-export const fetchCards = createAsyncThunk('cards/fetchCards', (url) => {
-  const { getData } = useHttp();
-
-  return getData(url);
-});
+export const fetchCards = createAsyncThunk(
+  'cards/fetchCards',
+  async (filters = {}) => {
+    const { getData } = useHttp();
+    return await getData(fetchCardsUrl(filters));
+  }
+);
 
 const cardsSlice = createSlice({
   name: 'cards',
   initialState,
   reducers: {
-    setQueryFilters: (state, action) => {
-      state.queryData.filters = {
-        ...state.queryData.filters,
+    setQuery: (state, action) => {
+      console.log(action.payload);
+      state.query = {
+        ...state.query,
         ...action.payload,
       };
     },
@@ -39,10 +38,10 @@ const cardsSlice = createSlice({
       state.currentCard = action.payload;
     },
     prevPage: (state, action) => {
-      state.queryData.filters.page = action.payload;
+      state.query.page = action.payload;
     },
     nextPage: (state, action) => {
-      state.queryData.filters.page = action.payload;
+      state.query.page = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,10 +65,4 @@ const { actions, reducer } = cardsSlice;
 
 export default reducer;
 
-export const {
-  setQueryFilters,
-  setCurrentFilters,
-  displayCard,
-  prevPage,
-  nextPage,
-} = actions;
+export const { setQuery, displayCard, prevPage, nextPage } = actions;

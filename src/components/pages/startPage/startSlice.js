@@ -3,7 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Импорт методов
 import { useHttp } from '../../../hooks/http.hook';
-import { getToken } from '../../../services/hearthstoneApiService';
+import {
+  getToken,
+  fetchMetadataUrl,
+} from '../../../services/hearthstoneApiService';
 
 const initialState = {
   metadata: null,
@@ -24,9 +27,9 @@ export const fetchToken = createAsyncThunk('start/getToken', async () => {
 
 export const fetchMetadata = createAsyncThunk(
   'start/fetchMetadata',
-  async (url) => {
+  async (filters = {}) => {
     const { getData } = useHttp();
-    return await getData(url);
+    return await getData(fetchMetadataUrl(filters));
   }
 );
 

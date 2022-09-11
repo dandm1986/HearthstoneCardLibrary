@@ -62,7 +62,7 @@ const apiData = {
   },
 };
 
-export const fetchMetadataUrl = (filtersObj) => {
+export const fetchMetadataUrl = (filtersObj = {}) => {
   const {
     apiBase,
     endpoint: { metadata: endpoint },
@@ -81,10 +81,29 @@ export const fetchMetadataUrl = (filtersObj) => {
   return url;
 };
 
-export const fetchHeroesUrl = (filtersObj) => {
+export const fetchHeroesUrl = (filtersObj = {}) => {
   const {
     apiBase,
     endpoint: { heroes: endpoint },
+    filters,
+  } = apiData;
+
+  const url = createURL({
+    apiBase,
+    endpoint,
+    filters: createFilterStr({
+      ...filters,
+      ...filtersObj,
+    }),
+  });
+
+  return url;
+};
+
+export const fetchCardsUrl = (filtersObj = {}) => {
+  const {
+    apiBase,
+    endpoint: { cards: endpoint },
     filters,
   } = apiData;
 

@@ -11,32 +11,22 @@ import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
-import {
-  createFilterStr,
-  createURL,
-} from '../../../services/hearthstoneApiService';
 import { fetchCards, displayCard, prevPage, nextPage } from './cardsSlice';
 
 // Импорт статических файлов
 import './cardsListPage.scss';
 
 const CardsListPage = () => {
-  const { cards, queryData, cardsLoadingStatus, currentPage } = useSelector(
+  const { cards, query, cardsLoadingStatus, currentPage } = useSelector(
     (state) => state.cards
   );
-  const { apiBase, endpoint, filters } = queryData;
-  const { page } = filters;
+  const { page } = query;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (currentPage !== page) {
-      const url = createURL({
-        apiBase,
-        endpoint,
-        filters: createFilterStr({ ...filters, set: 'core' }),
-      });
-      dispatch(fetchCards(url));
+      dispatch(fetchCards(query));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
