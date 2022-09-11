@@ -71,6 +71,7 @@ const FiltersPage = () => {
             type: ``,
             minionType: ``,
             gameMode: ``,
+            page: 1,
           }}
           onSubmit={(values) => {
             dispatch(setQuery(values));

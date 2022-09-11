@@ -1,7 +1,8 @@
 // Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 // Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
@@ -14,14 +15,15 @@ import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
 import {
-  createIdList,
-  createFilterStr,
-} from '../../../services/hearthstoneApiService';
-import {
+  fetchHeroes,
+  setHeroes,
+  displayHero,
   fetchHeroCards,
+  resetCurrentHeroIdx,
   prevHero,
   nextHero,
 } from '../heroesListPage/heroesSlice';
+import { fetchMetadata } from '../startPage/startSlice';
 
 // Импорт статических файлов
 import './singleHeroPage.scss';
@@ -30,44 +32,82 @@ const SingleHeroPage = () => {
   const {
     heroes,
     currentHero,
-    queryData,
     heroCards,
     currentHeroCardIdx,
     heroCardsLoadingStatus,
   } = useSelector((state) => state.heroes);
-  const { metadata } = useSelector((state) => state.metadata);
-  const { apiBase, endpoint, filters } = queryData;
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
-  const hero = heroes.find((hero) => hero.hero.id === currentHero);
-  const {
-    hero: thisHero,
-    heroPower: { image: heroPowerImg, name: heroPowerName },
-  } = hero;
+  const getHeroData = (heroes, currentIdx = currentHero) => {
+    const hero = heroes.find((hero) => hero.id === currentIdx);
+    const { heroCardsList } = hero;
+    dispatch(fetchHeroCards(heroCardsList));
+  };
 
-  const childIds = createIdList(thisHero.childIds);
+  const getCardIds = (classes) => {
+    return classes
+      .filter((item) => item.slug !== 'neutral')
+      .map((item) => item.cardId);
+  };
 
   useEffect(() => {
-    dispatch(
-      fetchHeroCards({
-        apiBase,
-        endpoint,
-        filters: createFilterStr({ ...filters, ids: childIds }),
-      })
-    );
+    if (!heroes) {
+      const currentIdx = +location.pathname.split('/').slice(-1).join('');
+      dispatch(displayHero(currentIdx));
+      dispatch(fetchMetadata())
+        .then(unwrapResult)
+        .then(async (metadata) => {
+          const { classes } = metadata;
+          const ids = getCardIds(classes);
+          const heroes = await Promise.all(
+            ids.map(async (id) => {
+              return dispatch(fetchHeroes({ ids: id }))
+                .then(unwrapResult)
+                .then((hero) => {
+                  const {
+                    hero: {
+                      name: heroName,
+                      image: heroImage,
+                      id,
+                      cardTypeId: cardType,
+                    },
+                    heroPower: { image: heroPowerImg, name: heroPowerName },
+                    class: { name: heroClass },
+                    cards,
+                  } = hero;
+                  return {
+                    id,
+                    heroName,
+                    heroImage,
+                    heroClass,
+                    type: metadata.types.find((type) => type.id === cardType)
+                      ?.name,
+                    heroPowerName,
+                    heroPowerImg,
+                    heroCardsList: cards[0].childIds,
+                  };
+                });
+            })
+          );
+          getHeroData(heroes, currentIdx);
+          dispatch(setHeroes(heroes));
+        })
+        .then(() => {
+          dispatch(resetCurrentHeroIdx());
+        });
+    } else {
+      getHeroData(heroes);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentHeroCardIdx]);
 
   const renderContent = (card) => {
+    const hero = heroes?.find((hero) => hero.id === currentHero);
+    const { heroClass, type, heroPowerImg, heroPowerName } = hero;
     const { name: heroName, image: heroImg, artistName: artist, health } = card;
-
-    const type = metadata.types.find(
-      (type) => type.id === card.cardTypeId
-    )?.name;
-    const heroClass = metadata.classes.find(
-      (heroClass) => heroClass.id === card.classId
-    )?.name;
 
     return (
       <SectionLayout>
@@ -128,7 +168,8 @@ const SingleHeroPage = () => {
     );
   };
 
-  const spinner = heroCardsLoadingStatus === 'loading' ? <Spinner /> : null;
+  const spinner =
+    heroCardsLoadingStatus === 'loading' || !heroes ? <Spinner /> : null;
   const error = heroCardsLoadingStatus === 'error' ? <ErrorMessage /> : null;
   const content =
     heroCardsLoadingStatus === `idle` && heroCards

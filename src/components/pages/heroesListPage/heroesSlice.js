@@ -3,10 +3,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Импорт методов
 import { useHttp } from '../../../hooks/http.hook';
-import { createURL } from '../../../services/hearthstoneApiService';
+import {
+  fetchHeroesUrl,
+  createIdList,
+} from '../../../services/hearthstoneApiService';
 
 const initialState = {
-  heroes: [],
+  heroes: null,
   heroesLength: 0,
   heroesLoadingStatus: 'idle',
   heroCards: null,
@@ -23,31 +26,17 @@ const initialState = {
 
 export const fetchHeroes = createAsyncThunk(
   'heroes/fetchHeroes',
-  ({ apiBase, endpoint, filters }) => {
+  async (filters = {}) => {
     const { getData } = useHttp();
-
-    const url = createURL({
-      apiBase,
-      endpoint,
-      filters,
-    });
-
-    return getData(url);
+    return await getData(fetchHeroesUrl(filters));
   }
 );
 
 export const fetchHeroCards = createAsyncThunk(
   'heroes/fetchHeroCards',
-  ({ apiBase, endpoint, filters }) => {
+  async (ids) => {
     const { getData } = useHttp();
-
-    const url = createURL({
-      apiBase,
-      endpoint,
-      filters,
-    });
-
-    return getData(url);
+    return await getData(fetchHeroesUrl({ ids: createIdList(ids) }));
   }
 );
 
@@ -55,6 +44,10 @@ const heroesSlice = createSlice({
   name: 'heroes',
   initialState,
   reducers: {
+    setHeroes: (state, action) => {
+      state.heroes = action.payload;
+      state.heroesLength = action.payload.length;
+    },
     displayHero: (state, action) => {
       state.currentHero = action.payload;
     },
@@ -73,9 +66,7 @@ const heroesSlice = createSlice({
       .addCase(fetchHeroes.pending, (state) => {
         state.heroesLoadingStatus = 'loading';
       })
-      .addCase(fetchHeroes.fulfilled, (state, action) => {
-        state.heroes.push(action.payload);
-        state.heroesLength++;
+      .addCase(fetchHeroes.fulfilled, (state) => {
         state.heroesLoadingStatus = 'idle';
       })
       .addCase(fetchHeroes.rejected, (state) => {
@@ -101,4 +92,10 @@ const { actions, reducer } = heroesSlice;
 
 export default reducer;
 
-export const { displayHero, resetCurrentHeroIdx, prevHero, nextHero } = actions;
+export const {
+  setHeroes,
+  displayHero,
+  resetCurrentHeroIdx,
+  prevHero,
+  nextHero,
+} = actions;

@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 // Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
@@ -11,62 +12,97 @@ import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
-import { createFilterStr } from '../../../services/hearthstoneApiService';
-import { fetchHeroes, resetCurrentHeroIdx, displayHero } from './heroesSlice';
+import {
+  fetchHeroes,
+  setHeroes,
+  resetCurrentHeroIdx,
+  displayHero,
+} from './heroesSlice';
+import { fetchMetadata } from '../startPage/startSlice';
 
 // Импорт статических файлов
 import './heroesListPage.scss';
 
 const HeroesListPage = () => {
-  const { heroes, heroesLength, queryData, heroesLoadingStatus } = useSelector(
+  const { heroes, heroesLength, heroesLoadingStatus } = useSelector(
     (state) => state.heroes
   );
-  const { metadata } = useSelector((state) => state.metadata);
+  const { metadata, metadataLoadingStatus } = useSelector(
+    (state) => state.metadata
+  );
 
-  const getCardIds = () => {
-    return metadata.classes
+  const getCardIds = (classes) => {
+    return classes
       .filter((item) => item.slug !== 'neutral')
       .map((item) => item.cardId);
   };
 
-  const { apiBase, endpoint, filters } = queryData;
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (heroesLength !== 10) {
-      getCardIds().forEach((id) => {
-        dispatch(
-          fetchHeroes({
-            apiBase,
-            endpoint,
-            filters: createFilterStr({ ...filters, ids: id }),
-          })
-        );
-      });
-    }
+  const getHeroesList = async (metadata) => {
+    const { classes } = metadata;
+    const ids = getCardIds(classes);
+    const heroes = await Promise.all(
+      ids.map(async (id) => {
+        return dispatch(fetchHeroes({ ids: id }))
+          .then(unwrapResult)
+          .then((hero) => {
+            const {
+              hero: {
+                name: heroName,
+                image: heroImage,
+                id,
+                cardTypeId: cardType,
+              },
+              heroPower: { image: heroPowerImg, name: heroPowerName },
+              class: { name: heroClass },
+              cards,
+            } = hero;
+            return {
+              id,
+              heroName,
+              heroImage,
+              heroClass,
+              type: metadata.types.find((type) => type.id === cardType)?.name,
+              heroPowerName,
+              heroPowerImg,
+              heroCardsList: cards[0].childIds,
+            };
+          });
+      })
+    );
+    dispatch(setHeroes(heroes));
+  };
 
+  useEffect(() => {
+    if (!metadata) {
+      dispatch(fetchMetadata())
+        .then(unwrapResult)
+        .then((metadata) => getHeroesList(metadata));
+    } else {
+      if (!heroesLength) getHeroesList(metadata);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderContent = (heroes, metadata) => {
+  const renderContent = (heroes) => {
     return (
       <SectionLayout>
         <SectionHeader headerText={`Найдено героев: ${heroes.length}`} />
         <article className="heroes_list_page__content overflow">
           <ul className="heroes_list_page__content__heroes">
-            {heroes.map((hero) => {
-              const card = hero.cards[0];
+            {heroes.map((hero, i) => {
+              const { id, heroName, heroImage } = hero;
               return (
-                <li key={card.id}>
+                <li key={i}>
                   <Link
-                    to={`/heroes/${card.id}`}
+                    to={`/heroes/${id}`}
                     onClick={() => {
-                      dispatch(displayHero(card.id));
+                      dispatch(displayHero(id));
                       dispatch(resetCurrentHeroIdx());
                     }}
                   >
-                    <img src={card.image} alt={card.name} />
+                    <img src={heroImage} alt={heroName} />
                   </Link>
                 </li>
               );
@@ -82,8 +118,11 @@ const HeroesListPage = () => {
     );
   };
 
-  const spinner = heroesLength < 10 ? <Spinner /> : null;
-  const error = heroesLoadingStatus === 'error' ? <ErrorMessage /> : null;
+  const spinner = heroesLength !== 10 ? <Spinner /> : null;
+  const error =
+    metadataLoadingStatus === 'error' || heroesLoadingStatus === 'error' ? (
+      <ErrorMessage />
+    ) : null;
   const content = heroesLength === 10 ? renderContent(heroes) : null;
 
   return (
