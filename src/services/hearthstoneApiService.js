@@ -28,7 +28,7 @@ export const getToken = async () => {
   }
 };
 
-export const createFilterStr = (filterData) => {
+const createFilterStr = (filterData) => {
   let filterArr = [];
   for (const [key, value] of Object.entries(filterData)) {
     if (value) filterArr.push(`${key}=${value}`);
@@ -41,7 +41,7 @@ export const createIdList = (arr) => {
   return arr.join('%2C');
 };
 
-export const createURL = ({ apiBase, endpoint, filters }) => {
+const createURL = ({ apiBase, endpoint, filters }) => {
   const url = `${apiBase}${endpoint}?${filters}&access_token=${sessionStorage.getItem(
     'Blizzard API token'
   )}`;

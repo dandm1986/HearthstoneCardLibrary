@@ -28,7 +28,6 @@ const cardsSlice = createSlice({
   initialState,
   reducers: {
     setQuery: (state, action) => {
-      console.log(action.payload);
       state.query = {
         ...state.query,
         ...action.payload,

@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Задача по разработке приложения на React для Frontend-стажировки в Lad
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Описание задачи
 
-## Available Scripts
+Написать полноценное SPA (single page application) приложение (например блог, интернет магазин, админ панель, сайт визитка или любое другое веб-приложение), которое должно удовлетворять следующим условиям:
 
-In the project directory, you can run:
+1. Стек `React` (или `NextJS`).
+2. Функциональные компоненты, `React-hooks`.
+3. `Модульные стили` или `styled-components`.
+4. Роутинг `React-router-dom` или `NextJS`.
+5. `Redux/ReduxToolKit`. Асинхронные экшены `Redux-thunk` или `Redux-saga`.
+6. Работа с API с помощью клиента `Axios` (можно использовать любое открытое API либо свой вариант).
 
-### `npm start`
+## Общее описание приложения
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**_Библиотека игральных карт Hearthstone_** - сервис для получения информации обо всех доступных картах из компьютерной игры **Hearthstone** производства Blizzard.\
+Функционал приложения:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Отображение игральных карт с возможностью получения детальной информации по каждой отдельной карте.
+- Отображение доступных базовых героев (классов) с возможностью получения детальной информации по каждому классу (в т.ч. разных героев в рамках одного класса).
+- Настройка отображения карт в соответствии с заданными параметрами или полнотекстовый поиск по базе данных.
 
-### `npm test`
+## Описание технической реализации и логики работы приложения
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Соответствие приложения условиям задачи
 
-### `npm run build`
+- Стек `React`.
+- React-компоненты реализованы в `функциональном стиле`, используются `react-hooks`.
+- Модульные `sass` стили.
+- Роутинг реализован при помощи `React Router v6`
+- Используется `ReduxToolKit`. Асинхронные экшены отрабатываются при помощи `useAsyncThunk()`.
+- HTTP запросы осуществляются с помощью `Axios`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Основные фичи приложения
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Минимизировано количество запросов к API - если текущее представление по картам или героям не менялось, то при рендере страницы повторный запрос к серверу осуществляться не будет (например, при переключении между страницами фильтрации, карт и героев, или при возвращении к общему списку со страницы отдельной карты или героя).
+- Реализована возможность повторного отображения содержимого конкретного рута при перезагрузке страницы (кроме страницы отдельной карты, т.к. не хватило времени реализовать этот функционал).
+- При переходе по несуществующему url отображается заглушка с кнопкой, ведущей на домашнюю страницу, и инициализацией перезагрузки страницы.
+- Реализована обертка-предохранитель `ErrorBoundaries`, а также компонент ошибки при рендере отдельных страниц.
+- Реализованы кастомные стили `input` компонентов и `полосы прокрутки` для соответствия общей стилистике приложения.
+- Реализована верстка под Full HD и HD мониторы. Мобильную верстку и верстку под 2K мониторы не успел реализовывать.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### API
 
-### `npm run eject`
+Использовался [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis) и следующие **эндпоинты**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- `/metadata` - получение всех доступных данных о сущностях игры (классы героев, наборы карт, типы существ и т.п.). Данные используются в основном для настройки параметров отбора карт, а также для ассоциации `id` различных полей в объектах карт и героев с их текстовыми наименованиями (свойство `name` объекта с искомым `id`).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `/cards` - получение списка карт, соответствующих определенному запросу. Важно отметить, что API возвращает карты в соответствии с их уникальными `id`. На практике часто будут отображаться визуально одинаковые карты, но при этом они не будут являться дублями, т.к. если одна и та же карта относится к разным наборам, то в базе ей будет присвоен уникальный `id` для каждого набора.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `/deck` - предназначается для получения информации о вариантах колод карт по коду колоды или `ids` карт, составляющих колоду. В рамках данного приложения используется для получения данных о базовом герое (классе) и является единственной возможностью в этом отношении, т.к. базовый герой (класс) представляет собой отдельную сущность, и API не позволяет запрашивать сразу список `ids` базовых героев (классов), поэтому приходится осуществлять отдельный запрос для получения данных по каждому герою.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Структура приложения

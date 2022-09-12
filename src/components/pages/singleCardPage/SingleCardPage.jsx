@@ -17,7 +17,7 @@ const SingleCardPage = () => {
     : null;
 
   const cardName = card.name;
-  const flavorText = card.flavorText;
+  const flavorText = card.flavorText.replace(new RegExp('<[^>]*>', 'ig'), '');
   const type = metadata.types.find((type) => type.id === card.cardTypeId)?.name;
   const minionType = metadata.minionTypes.find(
     (type) => type.id === card.minionTypeId
@@ -30,6 +30,9 @@ const SingleCardPage = () => {
     (heroClass) => heroClass.id === card.classId
   )?.name;
   const artist = card.artistName;
+
+  // const tags = new RegExp('<[^>]*>', 'ig');
+  // console.log(flavorText.replace(new RegExp('<[^>]*>', 'ig'), ''));
 
   return (
     <SectionLayout>
