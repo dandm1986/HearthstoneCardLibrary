@@ -28,27 +28,9 @@ export const getToken = async () => {
   }
 };
 
-const createFilterStr = (filterData) => {
-  let filterArr = [];
-  for (const [key, value] of Object.entries(filterData)) {
-    if (value) filterArr.push(`${key}=${value}`);
-  }
-  const filterStr = filterArr.join(`&`);
-  return filterStr;
-};
-
 export const createIdList = (arr) => {
   return arr.join('%2C');
 };
-
-const createURL = ({ apiBase, endpoint, filters }) => {
-  const url = `${apiBase}${endpoint}?${filters}&access_token=${sessionStorage.getItem(
-    'Blizzard API token'
-  )}`;
-  return url;
-};
-
-// Рефакторинг методов
 
 const apiData = {
   apiBase: 'https://us.api.blizzard.com/hearthstone',
@@ -60,6 +42,22 @@ const apiData = {
   filters: {
     locale: 'ru_RU',
   },
+};
+
+const createFilterStr = (filterData) => {
+  let filterArr = [];
+  for (const [key, value] of Object.entries(filterData)) {
+    if (value) filterArr.push(`${key}=${value}`);
+  }
+  const filterStr = filterArr.join(`&`);
+  return filterStr;
+};
+
+const createURL = ({ apiBase, endpoint, filters }) => {
+  const url = `${apiBase}${endpoint}?${filters}&access_token=${sessionStorage.getItem(
+    'Blizzard API token'
+  )}`;
+  return url;
 };
 
 export const fetchMetadataUrl = (filtersObj = {}) => {
