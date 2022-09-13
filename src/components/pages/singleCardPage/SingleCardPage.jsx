@@ -31,9 +31,6 @@ const SingleCardPage = () => {
   )?.name;
   const artist = card.artistName;
 
-  // const tags = new RegExp('<[^>]*>', 'ig');
-  // console.log(flavorText.replace(new RegExp('<[^>]*>', 'ig'), ''));
-
   return (
     <SectionLayout>
       <SectionHeader headerText={cardName} />

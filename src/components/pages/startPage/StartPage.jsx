@@ -14,9 +14,6 @@ import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
 // Импорт методов
 import { fetchToken, fetchMetadata } from './startSlice';
-import // createFilterStr,
-// createURL,
-'../../../services/hearthstoneApiService';
 
 // Импорт статических файлов
 import img from '../../../assets/img/start_page_hero.png';
@@ -26,17 +23,11 @@ const StartPage = () => {
   const { metadataLoadingStatus, tokenLoadingStatus } = useSelector(
     (state) => state.metadata
   );
-  // const { apiBase, endpoint, filters } = queryData;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchToken()).then(() => {
-      // const url = createURL({
-      //   apiBase,
-      //   endpoint,
-      //   filters: createFilterStr(filters),
-      // });
       dispatch(fetchMetadata());
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
