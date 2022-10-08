@@ -1,19 +1,15 @@
-// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import PaginationButton from '../../minorComponents/paginationButton/PaginationButton';
 import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
-// Импорт методов
 import { fetchCards, displayCard, prevPage, nextPage } from './cardsSlice';
 
-// Импорт статических файлов
 import './cardsListPage.scss';
 
 const CardsListPage = () => {
@@ -34,9 +30,7 @@ const CardsListPage = () => {
   const renderContent = (cards) => {
     return (
       <SectionLayout>
-        <SectionHeader
-          headerText={`Найдено карт по запросу: ${cards.cardCount}`}
-        />
+        <SectionHeader headerText={`Cards on request: ${cards.cardCount}`} />
         <article className="cards_list_page__content overflow">
           <ul className="cards_list_page__content__cards">
             {cards.cards.map((card) => (

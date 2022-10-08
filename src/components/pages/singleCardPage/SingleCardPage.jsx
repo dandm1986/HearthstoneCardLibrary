@@ -39,46 +39,38 @@ const SingleCardPage = () => {
         <div className="single_card_page__card__description">
           {flavorText ? <TextFieldComponent text={flavorText} /> : null}
           <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Тип'} />
+            <TextComponent text={'Type'} />
+            <TextFieldComponent text={type ? type : `No information...`} />
+          </div>
+          <div className="single_card_page__card__description__field_grid">
+            <TextComponent text={'Minion Type'} />
             <TextFieldComponent
-              text={type ? type : `Информация отсутствует...`}
+              text={minionType ? minionType : `No information...`}
             />
           </div>
           <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Тип существа'} />
+            <TextComponent text={'Rarity'} />
+            <TextFieldComponent text={rarity ? rarity : `No information...`} />
+          </div>
+          <div className="single_card_page__card__description__field_grid">
+            <TextComponent text={'Set'} />
+            <TextFieldComponent text={set ? set : `No information...`} />
+          </div>
+          <div className="single_card_page__card__description__field_grid">
+            <TextComponent text={'Class'} />
             <TextFieldComponent
-              text={minionType ? minionType : `Информация отсутствует...`}
+              text={heroClass ? heroClass : `No information...`}
             />
           </div>
           <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Редкость'} />
-            <TextFieldComponent
-              text={rarity ? rarity : `Информация отсутствует...`}
-            />
-          </div>
-          <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Набор'} />
-            <TextFieldComponent
-              text={set ? set : `Информация отсутствует...`}
-            />
-          </div>
-          <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Класс'} />
-            <TextFieldComponent
-              text={heroClass ? heroClass : `Информация отсутствует...`}
-            />
-          </div>
-          <div className="single_card_page__card__description__field_grid">
-            <TextComponent text={'Художник'} />
-            <TextFieldComponent
-              text={artist ? artist : `Информация отсутствует...`}
-            />
+            <TextComponent text={'Artist'} />
+            <TextFieldComponent text={artist ? artist : `No information...`} />
           </div>
         </div>
       </article>
       <footer className="single_card_page__footer section_footer">
         <Link to={'/cards'} className="btn">
-          Назад
+          Back
         </Link>
       </footer>
     </SectionLayout>

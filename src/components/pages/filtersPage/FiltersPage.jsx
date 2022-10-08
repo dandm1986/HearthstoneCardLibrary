@@ -1,20 +1,16 @@
-// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field, Form } from 'formik';
 
-// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
-// Импорт методов
 import { setQuery, fetchCards } from '../cardsListPage/cardsSlice';
 import { fetchMetadata } from '../startPage/startSlice';
 
-// Импорт статических файлов
 import './filtersPage.scss';
 
 const FiltersPage = () => {
@@ -82,7 +78,7 @@ const FiltersPage = () => {
           <Form id="filter_form" className="filters_page__form overflow">
             <div className="filters_page__form__grid_2_cols">
               <label className="filters_page__form__label" htmlFor="set">
-                Набор
+                Set
               </label>
               <Field
                 className="filters_page__form__field"
@@ -90,13 +86,13 @@ const FiltersPage = () => {
                 name="set"
                 as="select"
               >
-                <option value="">Выберите набор...</option>
+                <option value="">Select a set...</option>
                 {createFilterableOptions(metadata.sets)}
               </Field>
             </div>
             <div className="filters_page__form__grid_2_cols">
               <label className="filters_page__form__label" htmlFor="gameMode">
-                Режим игры
+                Game Mode
               </label>
               <Field
                 className="filters_page__form__field"
@@ -104,13 +100,13 @@ const FiltersPage = () => {
                 name="gameMode"
                 as="select"
               >
-                <option value="">Выберите режим игры...</option>
+                <option value="">Select a game mode...</option>
                 {createFilterableOptions(metadata.gameModes)}
               </Field>
             </div>
             <div className="filters_page__form__grid_4_cols">
               <label className="filters_page__form__label" htmlFor="class">
-                Класс
+                Class
               </label>
               <Field
                 className="filters_page__form__field"
@@ -118,11 +114,11 @@ const FiltersPage = () => {
                 name="class"
                 as="select"
               >
-                <option value="">Выберите класс...</option>
+                <option value="">Select a class...</option>
                 {createFilterableOptions(metadata.classes)}
               </Field>
               <label className="filters_page__form__label" htmlFor="manaCost">
-                Стоимость маны
+                Mana Cost
               </label>
               <Field
                 className="filters_page__form__field"
@@ -130,13 +126,13 @@ const FiltersPage = () => {
                 name="manaCost"
                 as="select"
               >
-                <option value="">Выберите стоимость...</option>
+                <option value="">Select mana cost...</option>
                 {createNumericOptions(0)}
               </Field>
             </div>
             <div className="filters_page__form__grid_4_cols">
               <label className="filters_page__form__label" htmlFor="rarity">
-                Редкость
+                Rarity
               </label>
               <Field
                 className="filters_page__form__field"
@@ -144,14 +140,14 @@ const FiltersPage = () => {
                 name="rarity"
                 as="select"
               >
-                <option value="">Выберите редкость...</option>
+                <option value="">Select rarity...</option>
                 {createFilterableOptions(metadata.rarities)}
               </Field>
               <label
                 className="filters_page__form__label"
                 htmlFor="collectible"
               >
-                Коллекционные
+                Collectible
               </label>
               <Field
                 className="filters_page__form__field"
@@ -159,15 +155,15 @@ const FiltersPage = () => {
                 name="collectible"
                 as="select"
               >
-                <option value="">Выберите...</option>
-                <option value="0,1">Все</option>
-                <option value="0">Неколлекционные</option>
-                <option value="1">Коллекционные</option>
+                <option value="">Select...</option>
+                <option value="0,1">All</option>
+                <option value="0">Non-collectible</option>
+                <option value="1">Collectible</option>
               </Field>
             </div>
             <div className="filters_page__form__grid_4_cols">
               <label className="filters_page__form__label" htmlFor="attack">
-                Атака
+                Attack
               </label>
               <Field
                 className="filters_page__form__field"
@@ -175,11 +171,11 @@ const FiltersPage = () => {
                 name="attack"
                 as="select"
               >
-                <option value="">Выберите атаку...</option>
+                <option value="">Select attack...</option>
                 {createNumericOptions(0)}
               </Field>
               <label className="filters_page__form__label" htmlFor="health">
-                Здоровье
+                Health
               </label>
               <Field
                 className="filters_page__form__field"
@@ -187,13 +183,13 @@ const FiltersPage = () => {
                 name="health"
                 as="select"
               >
-                <option value="">Выберите здоровье...</option>
+                <option value="">Select health...</option>
                 {createNumericOptions(1)}
               </Field>
             </div>
             <div className="filters_page__form__grid_4_cols">
               <label className="filters_page__form__label" htmlFor="type">
-                Тип
+                Type
               </label>
               <Field
                 className="filters_page__form__field"
@@ -201,11 +197,11 @@ const FiltersPage = () => {
                 name="type"
                 as="select"
               >
-                <option value="">Выберите тип...</option>
+                <option value="">Select a type...</option>
                 {createFilterableOptions(metadata.types)}
               </Field>
               <label className="filters_page__form__label" htmlFor="minionType">
-                Тип существа
+                Minion Type
               </label>
               <Field
                 className="filters_page__form__field"
@@ -213,7 +209,7 @@ const FiltersPage = () => {
                 name="minionType"
                 as="select"
               >
-                <option value="">Выберите подтип...</option>
+                <option value="">Select a minion type...</option>
                 {createFilterableOptions(metadata.minionTypes)}
               </Field>
             </div>
@@ -221,7 +217,7 @@ const FiltersPage = () => {
         </Formik>
         <footer className="filters_page__footer section_footer">
           <button className="btn" type="submit" form="filter_form">
-            Поиск
+            Search
           </button>
         </footer>
       </SectionLayout>

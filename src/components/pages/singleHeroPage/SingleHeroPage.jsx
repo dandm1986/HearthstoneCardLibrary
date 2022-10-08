@@ -1,10 +1,8 @@
-// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import TextComponent from '../../minorComponents/textComponent/TextComponent';
@@ -13,7 +11,6 @@ import PaginationButton from '../../minorComponents/paginationButton/PaginationB
 import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
-// Импорт методов
 import {
   fetchHeroes,
   setHeroes,
@@ -25,7 +22,6 @@ import {
 } from '../heroesListPage/heroesSlice';
 import { fetchMetadata } from '../startPage/startSlice';
 
-// Импорт статических файлов
 import './singleHeroPage.scss';
 
 const SingleHeroPage = () => {
@@ -116,23 +112,23 @@ const SingleHeroPage = () => {
           <img src={heroImg} alt={heroName} />
           <div className="single_hero_page__card__description">
             <div className="single_hero_page__card__description__field_grid">
-              <TextComponent text={'Класс'} />
+              <TextComponent text={'Class'} />
               <TextFieldComponent text={heroClass} />
             </div>
             <div className="single_hero_page__card__description__field_grid">
-              <TextComponent text={'Тип'} />
+              <TextComponent text={'Type'} />
               <TextFieldComponent text={type} />
             </div>
             <div className="single_hero_page__card__description__field_grid">
-              <TextComponent text={'Здоровье'} />
+              <TextComponent text={'Health'} />
               <TextFieldComponent text={health} />
             </div>
             <div className="single_hero_page__card__description__field_grid">
-              <TextComponent text={'Художник'} />
+              <TextComponent text={'Artist'} />
               <TextFieldComponent text={artist} />
             </div>
             <div className="single_hero_page__card__description__field_grid">
-              <TextComponent text={'Сила героя'} />
+              <TextComponent text={'Hero Power'} />
               <img src={heroPowerImg} alt={heroPowerName} />
             </div>
           </div>
@@ -161,7 +157,7 @@ const SingleHeroPage = () => {
             }
           />
           <Link to={'/heroes'} className="btn">
-            Назад
+            Back
           </Link>
         </footer>
       </SectionLayout>

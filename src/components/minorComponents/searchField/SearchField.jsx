@@ -49,7 +49,7 @@ const SearchField = () => {
             className="search_field__input"
             type="text"
             name="textFilter"
-            placeholder="Найти карту..."
+            placeholder="Find a card..."
           />
         </Form>
       </Formik>

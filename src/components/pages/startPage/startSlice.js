@@ -1,7 +1,5 @@
-// Импорт из внешних библиотек
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Импорт методов
 import { useHttp } from '../../../hooks/http.hook';
 import {
   getToken,
@@ -16,7 +14,7 @@ const initialState = {
     apiBase: 'https://us.api.blizzard.com/hearthstone',
     endpoint: '/metadata',
     filters: {
-      locale: 'ru_RU',
+      locale: 'en_EN',
     },
   },
 };

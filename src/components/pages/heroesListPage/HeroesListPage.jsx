@@ -1,17 +1,14 @@
-// Импорт из внешних библиотек
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import TextFieldComponent from '../../minorComponents/textFieldComponent/TextFieldComponent';
 import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
-// Импорт методов
 import {
   fetchHeroes,
   setHeroes,
@@ -20,7 +17,6 @@ import {
 } from './heroesSlice';
 import { fetchMetadata } from '../startPage/startSlice';
 
-// Импорт статических файлов
 import './heroesListPage.scss';
 
 const HeroesListPage = () => {
@@ -88,7 +84,7 @@ const HeroesListPage = () => {
   const renderContent = (heroes) => {
     return (
       <SectionLayout>
-        <SectionHeader headerText={`Найдено героев: ${heroes.length}`} />
+        <SectionHeader headerText={`Heroes found: ${heroes.length}`} />
         <article className="heroes_list_page__content overflow">
           <ul className="heroes_list_page__content__heroes">
             {heroes.map((hero, i) => {
@@ -110,9 +106,7 @@ const HeroesListPage = () => {
           </ul>
         </article>
         <footer className="heroes_list_page__footer section_footer">
-          <TextFieldComponent
-            text={`Выберите героя, чтобы получить более подробную информацию о нём`}
-          />
+          <TextFieldComponent text={`Select a hero to find out the details`} />
         </footer>
       </SectionLayout>
     );

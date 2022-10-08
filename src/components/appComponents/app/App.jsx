@@ -29,9 +29,7 @@ function App() {
               <Route path="filters" element={<FiltersPage />} />
               <Route
                 path="*"
-                element={
-                  <ErrorMessage text={'Ой-ой-ой! Нет такой страницы...'} />
-                }
+                element={<ErrorMessage text={'Oh-oh-oh! No such page...'} />}
               />
             </Routes>
           </ErrorBoundary>

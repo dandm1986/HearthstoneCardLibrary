@@ -5,7 +5,7 @@ import img from '../../../assets/img/error.png';
 import './errorMessage.scss';
 
 const ErrorMessage = ({
-  text: message = 'A-A-A-A!!! Что-то пошло не так...',
+  text: message = 'A-A-A-A!!! Something went wrong...',
 }) => {
   const reloadApp = () => {
     window.location.reload();
@@ -25,7 +25,7 @@ const ErrorMessage = ({
           }}
           className="btn"
         >
-          На главную страницу
+          Home page
         </button>
       </div>
     </div>

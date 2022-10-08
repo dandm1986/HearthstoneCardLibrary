@@ -13,7 +13,7 @@ const NavBar = () => {
               color: isActive ? '#fcd144' : '#d4b13e',
             })}
           >
-            Карты
+            Cards
           </NavLink>
         </li>
         <li>
@@ -24,7 +24,7 @@ const NavBar = () => {
               color: isActive ? '#fcd144' : '#d4b13e',
             })}
           >
-            Герои
+            Heroes
           </NavLink>
         </li>
       </ul>

@@ -1,7 +1,5 @@
-// Импорт из внешних библиотек
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Импорт методов
 import { useHttp } from '../../../hooks/http.hook';
 import { fetchCardsUrl } from '../../../services/hearthstoneApiService';
 

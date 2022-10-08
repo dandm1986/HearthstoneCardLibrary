@@ -1,10 +1,8 @@
-// Импорт из внешних библиотек
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-// Импорт компонентов
 import SectionLayout from '../../minorComponents/sectionLayout/SectionLayout';
 import SectionHeader from '../../minorComponents/sectionHeader/SectionHeader';
 import TextComponent from '../../minorComponents/textComponent/TextComponent';
@@ -12,10 +10,8 @@ import TextFieldComponent from '../../minorComponents/textFieldComponent/TextFie
 import Spinner from '../../minorComponents/spinner/Spinner';
 import ErrorMessage from '../../minorComponents/errorMessage/ErrorMessage';
 
-// Импорт методов
 import { fetchToken, fetchMetadata } from './startSlice';
 
-// Импорт статических файлов
 import img from '../../../assets/img/start_page_hero.png';
 import './startPage.scss';
 
@@ -36,42 +32,38 @@ const StartPage = () => {
   const renderContent = () => {
     return (
       <SectionLayout>
-        <SectionHeader
-          headerText={
-            'Добро пожаловать в библиотеку игральных карт Hearthstone!'
-          }
-        />
+        <SectionHeader headerText={'Welcome to Hearthstone Card Library!'} />
         <article className="start_page__content overflow">
           <img className="start_page__content__image" src={img} alt="thrall" />
           <div className="start_page__content__description">
-            <TextComponent text={'Раздел "Карты"'} />
+            <TextComponent text={'"Cards" section'} />
             <TextFieldComponent
               text={
-                'Отображает список всех карт. Нажмите на карту, чтобы получить более подробную информацию о ней.'
+                'Displays a list of all cards. Click on a card to get more information about it.'
               }
             />
-            <TextComponent text={'Раздел "Герои"'} />
+            <TextComponent text={'"Heroes" section'} />
             <TextFieldComponent
               text={
-                'Отображает список всех доступных в игре героев (классов). Нажмите на героя, чтобы получить более подробную информацию о нем.'
+                'Displays a list of all available heroes (classes) in the game. Click on a hero to find out details.'
               }
             />
-            <TextComponent text={'Раздел "Фильтры"'} />
+            <TextComponent text={'"Filters" section'} />
             <TextFieldComponent
               text={
-                'Сформируйте список карт, соответсвующих определенным параметрам, или просто введите название карты в поле поиска.'
+                'Get a list of cards that match specific query parameters, or simply enter a card name into the search field.'
               }
             />
             <TextComponent
               text={
-                'Hearthstone - самая красочная игра Blizzard. Этот сервис создан, в первую очередь, для того, чтобы разглядывать карты ;)'
+                "Hearthstone is Blizzard's most colourful game. This service is designed primarily for enjoing the outstanding game art ;)"
               }
             />
           </div>
         </article>
         <footer className="start_page__footer section_footer">
           <Link to={'/cards'} className="btn">
-            Вперёд!
+            Go!
           </Link>
         </footer>
       </SectionLayout>
