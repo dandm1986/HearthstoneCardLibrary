@@ -40,7 +40,7 @@ const apiData = {
     heroes: '/deck',
   },
   filters: {
-    locale: 'en_EN',
+    locale: 'en_US',
   },
 };
 

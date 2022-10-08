@@ -1,133 +1,125 @@
-# Задача по разработке приложения на React для Frontend-стажировки в Lad
+# Hearthstone Card Library
 
-## Описание задачи
+## General Description
 
-Написать полноценное SPA (single page application) приложение (например блог, интернет магазин, админ панель, сайт визитка или любое другое веб-приложение), которое должно удовлетворять следующим условиям:
+[**_Hearthstone Card Library_**](https://hearthstone-card-library.herokuapp.com/) is a service for obtaining information on all available cards from the Blizzard computer game `Hearthstone`.
 
-1. Стек `React` (или `NextJS`).
-2. Функциональные компоненты, `React-hooks`.
-3. `Модульные стили` или `styled-components`.
-4. Роутинг `React-router-dom` или `NextJS`.
-5. `Redux/ReduxToolKit`. Асинхронные экшены `Redux-thunk` или `Redux-saga`.
-6. Работа с API с помощью клиента `Axios` (можно использовать любое открытое API либо свой вариант).
+Application functionality:
 
-## Общее описание приложения
+- Display of cards with the ability to obtain detailed information on each individual card.
+- Display available heroes (classes) with the ability to get detailed information on each class (including different heroes within one class).
+- Customise the display of card lists according to the query parameters set or full-text search of the database.
 
-[**_Библиотека игральных карт Hearthstone_**](https://hearthstone-card-library.herokuapp.com/) - сервис для получения информации обо всех доступных картах из компьютерной игры `Hearthstone` производства Blizzard. Функционал приложения:
+## Technologies used
 
-- Отображение игральных карт с возможностью получения детальной информации по каждой отдельной карте.
-- Отображение доступных базовых героев (классов) с возможностью получения детальной информации по каждому классу (в т.ч. разных героев в рамках одного класса).
-- Настройка отображения списков карт в соответствии с заданными параметрами или полнотекстовый поиск по базе данных.
+- An SPA created with `React`
+- React components are implemented in a `functional style`, `react-hooks` are used
+- Sass
+- Routing is implemented using `React Router v6`
+- The `ReduxToolKit` is used. Asynchronous actions are handled using `createAsyncThunk()`
+- HTTP requests are handled using `Axios`
 
-### Соответствие приложения условиям задачи
+## Main features
 
-- Стек `React`.
-- React-компоненты реализованы в `функциональном стиле`, используются `react-hooks`.
-- Модульные `sass` стили.
-- Роутинг реализован при помощи `React Router v6`
-- Используется `ReduxToolKit`. Асинхронные экшены отрабатываются при помощи `createAsyncThunk()`.
-- HTTP запросы осуществляются с помощью `Axios`.
+- Minimized number of requests to API - if current page data (cards or heroes) was not changed, then the additional request to the server won't be made when a page re-renders (for example, when switching between filters page, cards page and heroes page or when switching back to a cards / heroes list from a single card / hero view).
+- Re-display content of a particular root when the current page reloads (except for the single card page view yet).
+- When navigating to `non-existent url`, an error component with a button leading to the home page with page reload initialization is displayed.
+- `Formik` library was used to create a form for query filtering.
+- Implemented `ErrorBoundaries` wrapper, as well as an error component when rendering pages.
+- Implemented custom styles for `input` components and `scroll bars` to match the overall style of the application.
+- Implemented rendering for Full HD and HD monitors. Mobile layout and layout for 2K monitors not implemented yet.
 
-### Основные фичи приложения
+## API
 
-- Минимизировано количество запросов к API - если текущее представление по картам или героям не менялось, то при рендере страницы повторный запрос к серверу осуществляться не будет (например, при переключении между страницами фильтрации, карт и героев или при возвращении к общему списку со страницы отдельной карты или героя).
-- Реализована возможность повторного отображения содержимого конкретного рута при перезагрузке страницы (кроме страницы отдельной карты, т.к. не хватило времени реализовать этот функционал).
-- При переходе по `несуществующему url` отображается заглушка с кнопкой, ведущей на домашнюю страницу c инициализацией перезагрузки страницы.
-- Использована библиотека `Formik` для создания формы фильтрации запросов.
-- Реализована обертка-предохранитель `ErrorBoundaries`, а также компонент ошибки при рендере отдельных страниц.
-- Реализованы кастомные стили `input` компонентов и `полосы прокрутки` для соответствия общей стилистике приложения.
-- Реализована верстка под Full HD и HD мониторы. Мобильную верстку и верстку под 2K мониторы не успел реализовывать.
+[Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis) used with the following `endpoints':
 
-### API
+- `/metadata` - getting all available data about game entities (hero classes, card sets, creature types, etc.). The data is used mainly for setting card selection parameters, as well as for association of `id` of different fields in card and hero objects with their text names (property `name` of the object with the searched `id`).
 
-Использовался [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis) и следующие `эндпоинты`:
+- `/cards` - retrieve a list of cards matching a particular query. It is important to note that the API returns cards according to their unique `id`. In practice, visually identical cards will often be displayed, but they will not be duplicates because if the same card belongs to different sets, it will be assigned a unique `id` for each set in the database.
 
-- `/metadata` - получение всех доступных данных о сущностях игры (классы героев, наборы карт, типы существ и т.п.). Данные используются в основном для настройки параметров отбора карт, а также для ассоциации `id` различных полей в объектах карт и героев с их текстовыми наименованиями (свойство `name` объекта с искомым `id`).
+- `/deck` - is used to get information about the cards within a deck by the deck code or `ids` of the cards that make up the deck. Within this application, it is used to retrieve data about the base hero (class) and is the only option in this regard, since the base hero (class) is a separate entity and the API does not allow to query the list of `ids` of base heroes (classes) at once, so a separate query has to be made to get the data for each hero.
 
-- `/cards` - получение списка карт, соответствующих определенному запросу. Важно отметить, что API возвращает карты в соответствии с их уникальными `id`. На практике часто будут отображаться визуально одинаковые карты, но при этом они не будут являться дублями, т.к. если одна и та же карта относится к разным наборам, то в базе ей будет присвоен уникальный `id` для каждого набора.
-
-- `/deck` - предназначается для получения информации о вариантах колод карт по коду колоды или `ids` карт, составляющих колоду. В рамках данного приложения используется для получения данных о базовом герое (классе) и является единственной возможностью в этом отношении, т.к. базовый герой (класс) представляет собой отдельную сущность, и API не позволяет запрашивать сразу список `ids` базовых героев (классов), поэтому приходится осуществлять отдельный запрос для получения данных по каждому герою.
-
-## Структура приложения
+## Application structure
 
 ### `components`
 
-Разделены на 3 папки:
+Divided into 3 folders:
 
-- `appComponents` - составляют постоянную видимую структуру приложения:
-  - `App` - основной компонент, отвечающий в т.ч. за маршрутизацию. Руты страниц отдельных карт и героев реализованы не как вложенные, т.к., по сути, каждый раз рендерится отдельная страница, а `outlet` должен был бы быть размещен в компоненте `MainSection`, по отношению к которому эти руты вложенными не являются.
-  - `AppHeader` - шапка приложения, содержащая кнопки навигации и поле для полнотекстового поиска по базе данных.
-  - `MainSection` - компонент-обертка, в котором рендерятся дочерние компоненты страниц. Сделан в т.ч. для того, чтобы рендерить спиннер и компонент ошибоки по центру.
-- `minorComponents` - содержит все вспомогательные компоненты:
-  - `SectionHeader` - содержит заголовок страницы, принимает текст для конкретной страницы в виде props.
-  - `SectionLayout` - компонент-обертка, содержащий общий шаблон верстки страницы.
-  - `NavBar` - содержит панель навигации в шапке приложения.
-  - `FilterButton` - содержит кнопку перехода на страницу фильтров в шапке приложения.
-  - `SearchField` - содержит компонент полнотекстового поиска в шапке приложения.
-  - `PaginationButton` - содержит компонент кнопки для навигации по страницам в рамках `CardsListPage` (при выгрузке более 10 результатов) и `SingleHeroPage` (просмотр альтернативных изображений героев).
-  - `TextComponent` - содержит стандартный текстовый компонент, использующийся при верстке отдельных страниц.
-  - `TextFieldComponent` - содержит стандартный текстовый компонет, визуально оформленный в виде поля с текстом и использующийся при верстке отдельных страниц.
-  - `Spinner` - содержит компонент спиннера.
-  - `ErrorBoundary` - компонент-обертка, отлавливающий ошибки в рамках этапов жизненного цикла дочерних компонентов. Представляет собой классовый компонент, т.к. использует хук жизненного цикла `componentDidCatch()`. Не отлавливает ошибки внутри обработчиков событий и асинхронного кода. Для этого в рамках страниц рендерится отдельный компонент ошибки.
-  - `ErrorMessage` - содержит компонент ошибки с кнопкой возврата на домашнюю страницу с автоматической перезагрузкой страницы. Принимаеи текст для отображения в виде props.
-- `pages` - содержит все компоненты страниц, рендерящиеся в рамках `MainSection`:
-  - `StartPage` - стартовая страница приложения с общей информацией.
-    - `startSlice` - срез стора для работы с метаданными.
-  - `CardsListPage` - страница для отображения полученных от API карт с указанием количества карт, соответствующих запросу, а также количество страниц (базовая настройка запроса - отображение 10 карт на странице). Запрос по умолчанию возвращает все доступные коллекционные карты (4000+ карт).
-    - `cardsSlice` - срез стора для работы с данными о картах.
-  - `SingleCardPage` - страница для отображения информации о конкретной карте.
-  - `HeroesListPage` - страница, отображающая список всех доступных в игре на момент запроса героев (классов). Изображение класса "Охотник на демонов" отличается от других карт, но такие данные возвращает [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis).
-    - `heroesSlice` - срез стора для работы с данными о героях.
-  - `SingleHeroPage` - страница для отображения информации о конкретном герое. Позволяет получать альтернативные карты героев в рамках одного класса.
-  - `FiltersPage` - страница, содержащая форму с полями выбора различных условий отбора карт. Данные в полях отбора получены из `metadata`. Форма создана при помощи библиотеки `Formik`.
+- `appComponents` make up the permanent visible structure of the application:
+  - `App` is the main component also responsible for routing. Pages of single cards and heroes are not implemented as nested roots, because, in fact, each time a separate page is rendered, and `outlet` should have been placed in the `MainSection` component, in relation to which these routers are not nested.
+  - `AppHeader` is the application header which contains the navigation buttons and a field for a full-text search in the database.
+  - `MainSection` is a wrapper component within which child page components are rendered. Made in order to render the spinner and error components in the centre of the page.
+- `minorComponents` contains all child components:
+  - `SectionHeader` contains page header, takes the text for a particular page as a prop.
+  - `SectionLayout` a wrapper component which contains a common layout template page.
+  - `NavBar` contains the navigation bar of the App's header.
+  - `FilterButton` contains a button in the App's header leading to the filter page.
+  - `SearchField` contains a full-text search component in the App's header.
+  - `PaginationButton` contains a button component to navigate through the pages within `CardsListPage` (if more than 10 results are downloaded) and `SingleHeroPage` (view alternative hero images).
+  - `TextComponent` contains a standard text component.
+  - `TextFieldComponent` - contains a standard text component, visually designed as a field with text.
+  - `Spinner` contains the spinner component.
+  - ErrorBoundary`is a wrapper component which catches errors in the phases of the life cycle of child components. This is a class component because it uses the`componentDidCatch()` lifecycle hook. Does not catch errors within event handlers and asynchronous code. A separate error component is made for this purpose.
+  - `ErrorMessage` contains an error component with a button to return to the home page with automatic page reloading. It accepts text to display as props.
+- `Pages` contains all components of the page, rendered within the `MainSection`:
+  - `StartPage` is the start page of the application with the general information.
+    - `StartSlice` is a store slice to handle metadata.
+  - `CardsListPage` is a page to display the cards received from the API with the number of cards matching the request, as well as the number of pages (the basic setting of the request is to display 10 cards per page). The default query returns all available collectible cards (4000+ cards).
+    - `CardsSlice` is a store slice to handle cards' data.
+  - `SingleCardPage` is a page to display information about a particular card.
+  - `HeroesListPage` is a page that displays a list of all available heroes (classes) in the game at the time of the request. The Demon Hunter class image is different from other cards, but such data comes from the [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis).
+    - `heroesSlice` is a store slice to handle hero data.
+  - `SingleHeroPage` is a page to display information about a particular hero. Allows for alternate hero cards within a single class.
+  - `FiltersPage` is a page containing a form with fields to select different card selection conditions. The data in the selection fields are obtained from `metadata`. The form is created using the `Formik` library.
 
 ### `styles`
 
-- `styles.scss` - общие стили приложения.
-- `variables.scss` - общие переменные, повторяющиеся в рамках стилей отдельных компонентов (здесь только цвета).
+- `styles.scss` - common app styles.
+- `variables.scss` - common variables (here only colors).
 
 ### `assets`
 
-- `fonts` - содержит шрифт `Belwe` - официальный шрифт `Hearthstone`.
-- `img` - содержит все статические изображения.
+- `fonts` - contains official `Hearthstone` font - `Belwe`.
+- `img` - contains all static images.
 
 ### `store`
 
-Стор приложения содержит 3 отдельных среза.
+Contains the App store which has 3 slices.
 
 ### `services`
 
-Содержит методы для правильной работы с [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis), а также объект с общими для всех запросов настройками.
+Contains nethods for correct working with [Hearthstone API](https://develop.battle.net/documentation/hearthstone/game-data-apis) and common request settings objects.
 
 ### `hooks`
 
-Содержит кастомый хук, экспортирующий функцию для осуществления запроса к API.
+Contains a custom hook that exports a function to make a request to the API.
 
-## Логика работы приложения
+## Application logic
 
-При запуске приложения рендерится `StartPage`:
+When the application starts, the `StartPage` is rendered:
 
-- Запрашивается `токен` и сохраняется в `Session Storage` - решил сделать так, чтобы не писать проверку по дате экспирации. При выпуске один и тот же токен получает 3600s, поэтому нет уверенности, что это не задвоение данных от API, и если высчитывать дату экспирации в момент выпуска ключа и сохранять его в `Local Storage` - дата будет валидной. Поэтому решил ограничиться хранением токена в рамках сессии.
-- Осуществляется запрос к API для получения `metadata`. Т.к. метаданные в дальнейшем используются практически на всех остальных страницах, логично получать их при старте приложения:
+- The `token` is requested and stored in the `Session Storage` - decided to do this so as not to make an expiry date check. The same token gets 3600s each time it's issued, so there's a chance that there would be double data from API. So I decided to limit myself to storing the token within the session.
 
-  - `FiltersPage` - формирование списков параметров фильтрации карт.
-  - `HeroesListPage` - формирование списка `ids` классов героев с дальнейшим формированием списка карт героев и отображением их на странице.
-  - `SingleCardPage` и `SingleHeroPage` - получение наименований (классы, типы, наборы и т.п.) по индексу.
+- There is a request to the API to get `metadata`. Since the metadata is later used on almost all other pages, it is logical to get it at application startup:
 
-При переходе на `CardsListPage` формируется список полученных по запросу карт. Навигация по страницам списка осуществляется при помощи изменения состояния свойства `currentPage`. Также срез содержит объект настроек текущего запроса `query`, который изменяется в зависимости от выбранных на странице фильтрации параметров.
+  - `FiltersPage` - generation of lists of card filtering parameters.
+  - `HeroesListPage` - generation of a list of `ids` classes of heroes with the further making of a list of hero cards and displaying them on the page.
+  - `SingleCardPage` and `SingleHeroPage` - getting names (classes, types, sets, etc.) by index.
 
-`FiltersPage` - при сабмите формы сформированный объект обновляет `query` в срезе `cards`, происходит переход на `CardsListPage`, где отображаются карты в соответствии с обновленным объектом запроса.
+When you go to `CardsListPage`, a list of cards retrieved on request is generated. Navigation through the list pages is done by changing the state of the `currentPage` property. The slice also contains a settings object of the current `query`, which changes depending on the parameters selected on the filtering page.
 
-В целом процесс запроса к API осуществляется за счет формирования строки `url` в соответствии с требуемыми параметрами. В случае со списками карт обязательно берутся в расчет данные из объекта `query`.
+`FiltersPage` - when you submit the form, the generated object updates `query` in the `cards` slice, there happens a transition to `CardsListPage`, where the cards are displayed according to the updated query object.
 
-`HeroesListPage` - особенность работы этого компонента заключается в том, что для того, чтобы сформировать и отобразить список героев необходимо пройти 2 этапа:
+In general, the API query process is done by forming the `url` string according to the required parameters. In the case of card lists, the data from the `query` object is necessarily taken into account.
 
-- сформировать массив `ids` базовых героев (классов),
-- сделать отдельный запрос к API для получения данных по каждому герою и сформировать массив из полученных объектов.
-  Такие ограничения накладывает сам API, т.к. эндпоинт `/deck` не может отработать список `ids` базовых классовых героев. Поэтому в `ReduxDevTools` будут видны 10 запросов - по количеству отдельных героев. При этом получать список обыкновенных карт по `ids` можно - например, так получаются данные по альтернативным (небазовым) героям в рамках одного и того же класса для отображения в `SingleHeroPage`.
+`HeroesListPage` - the peculiarity of this component is that in order to form and display a list of heroes you need to go through 2 steps:
 
-## Что можно улучшить
+- Generate an array of `ids` of base heroes (classes),
+- Make a separate request to API to retrieve data on each hero and generate an array of retrieved objects.
+  Such limitations are imposed by the API itself, as the `/deck` endpoint cannot work off the list of `ids` of base class heroes. Therefore, `ReduxDevTools` will show 10 requests - by the number of individual heroes. However, it is possible to get a list of common cards by `ids` - for example, this is how data on alternate (non-base) heroes within the same class is obtained for display in `SingleHeroPage`.
 
-- Адаптивная верстка под планшеты, смартфоны и 2K мониторы.
-- Сохранение текущих настроек на странице фильтрации и кнопка сброса фильтров.
-- Повторное отображение содержимого при перезагрузке `SingleCardPage`.
+## Things to improve
+
+- Adaptive layout for tablets, smartphones and 2K monitors.
+- Save the current settings on the filter page and create a button to reset filters.
+- Re-display content when `SingleCardPage` is reloaded.

@@ -17,7 +17,7 @@ const initialState = {
     apiBase: 'https://us.api.blizzard.com/hearthstone',
     endpoint: '/deck',
     filters: {
-      locale: 'en_EN',
+      locale: 'en_US',
     },
   },
 };

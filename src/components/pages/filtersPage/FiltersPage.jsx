@@ -52,7 +52,7 @@ const FiltersPage = () => {
   const renderContent = (metadata) => {
     return (
       <SectionLayout>
-        <SectionHeader headerText={'Выберите параметры поиска карты'} />
+        <SectionHeader headerText={'Select card search options'} />
 
         <Formik
           initialValues={{
