@@ -22,6 +22,8 @@ import {
 } from '../heroesListPage/heroesSlice';
 import { fetchMetadata } from '../startPage/startSlice';
 
+import { decks } from '../../../utils/decks';
+
 import './singleHeroPage.scss';
 
 const SingleHeroPage = () => {
@@ -42,11 +44,11 @@ const SingleHeroPage = () => {
     dispatch(fetchHeroCards(heroCardsList));
   };
 
-  const getCardIds = (classes) => {
-    return classes
-      .filter((item) => item.slug !== 'neutral')
-      .map((item) => item.cardId);
-  };
+  // const getCardIds = (classes) => {
+  //   return classes
+  //     .filter((item) => item.slug !== 'neutral')
+  //     .map((item) => item.cardId);
+  // };
 
   useEffect(() => {
     if (!heroes) {
@@ -55,11 +57,9 @@ const SingleHeroPage = () => {
       dispatch(fetchMetadata())
         .then(unwrapResult)
         .then(async (metadata) => {
-          const { classes } = metadata;
-          const ids = getCardIds(classes);
           const heroes = await Promise.all(
-            ids.map(async (id) => {
-              return dispatch(fetchHeroes({ ids: id }))
+            decks.map(async (deck) => {
+              return dispatch(fetchHeroes({ code: deck }))
                 .then(unwrapResult)
                 .then((hero) => {
                   const {

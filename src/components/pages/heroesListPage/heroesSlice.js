@@ -26,7 +26,8 @@ export const fetchHeroes = createAsyncThunk(
   'heroes/fetchHeroes',
   async (filters = {}) => {
     const { getData } = useHttp();
-    return await getData(fetchHeroesUrl(filters));
+    const hero = await getData(fetchHeroesUrl(filters));
+    return hero;
   }
 );
 

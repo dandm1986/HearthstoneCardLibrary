@@ -17,6 +17,8 @@ import {
 } from './heroesSlice';
 import { fetchMetadata } from '../startPage/startSlice';
 
+import { decks } from '../../../utils/decks';
+
 import './heroesListPage.scss';
 
 const HeroesListPage = () => {
@@ -27,20 +29,18 @@ const HeroesListPage = () => {
     (state) => state.metadata
   );
 
-  const getCardIds = (classes) => {
-    return classes
-      .filter((item) => item.slug !== 'neutral')
-      .map((item) => item.cardId);
-  };
+  // const getCardIds = (classes) => {
+  //   return classes
+  //     .filter((item) => item.slug !== 'neutral')
+  //     .map((item) => item.cardId);
+  // };
 
   const dispatch = useDispatch();
 
   const getHeroesList = async (metadata) => {
-    const { classes } = metadata;
-    const ids = getCardIds(classes);
     const heroes = await Promise.all(
-      ids.map(async (id) => {
-        return dispatch(fetchHeroes({ ids: id }))
+      decks.map(async (deck) => {
+        return dispatch(fetchHeroes({ code: deck }))
           .then(unwrapResult)
           .then((hero) => {
             const {
@@ -67,6 +67,8 @@ const HeroesListPage = () => {
           });
       })
     );
+    console.log('HEROES: ', heroes);
+
     dispatch(setHeroes(heroes));
   };
 
@@ -112,12 +114,12 @@ const HeroesListPage = () => {
     );
   };
 
-  const spinner = heroesLength !== 10 ? <Spinner /> : null;
+  const spinner = !heroes ? <Spinner /> : null;
   const error =
     metadataLoadingStatus === 'error' || heroesLoadingStatus === 'error' ? (
       <ErrorMessage />
     ) : null;
-  const content = heroesLength === 10 ? renderContent(heroes) : null;
+  const content = heroes ? renderContent(heroes) : null;
 
   return (
     <>
